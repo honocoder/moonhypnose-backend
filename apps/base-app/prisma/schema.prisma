@@ -1,0 +1,55 @@
+datasource mongo {
+  provider = "mongodb"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?
+  firstName String?
+  id        String   @id @default(auto()) @map("_id") @mongo.ObjectId
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+model Consultant {
+  age               Int?
+  analyses          Analyse? @relation(fields: [analysesId], references: [id])
+  analysesId        String?  @unique
+  createdAt         DateTime @default(now())
+  email             String?
+  firstName         String?
+  id                String   @id @default(auto()) @map("_id") @mongo.ObjectId
+  job               String?
+  kids              Int?
+  lastName          String?
+  married           Boolean?
+  phone             String?
+  updatedAt         DateTime @updatedAt
+  whereTheyComeFrom String?
+  whyTheyCome       String?
+}
+
+model Analyse {
+  consultant Consultant?
+  content    String?
+  createdAt  DateTime    @default(now())
+  id         String      @id @default(auto()) @map("_id") @mongo.ObjectId
+  title      String?
+  updatedAt  DateTime    @updatedAt
+}
+
+model Script {
+  content   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(auto()) @map("_id") @mongo.ObjectId
+  title     String?
+  updatedAt DateTime @updatedAt
+}
